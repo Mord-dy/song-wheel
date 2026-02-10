@@ -112,20 +112,31 @@
     @media (max-width: 900px){
       .stage{
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+          "title"
+          "left"
+          "wheel";
       }
+    
+      .stage-spacer{ display:none; }
+    
       .left-art{
         height: auto;
         justify-content: center;
       }
+    
       .left-art img{
         height: auto;
         width: 100%;
         max-width: var(--wheelW);
       }
+    
       .title-right{
         width: 100%;
       }
     }
+
 
     /* Cadre roue */
     .wheel-frame{
