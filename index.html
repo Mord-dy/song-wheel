@@ -255,11 +255,11 @@
       font-variant-numeric: tabular-nums;
       opacity: 0.95;
     
-      width: 20px; /* LARGEUR FIXE réservée au numéro :
+      width: 40px; /* LARGEUR FIXE réservée au numéro :
                       - augmente => le label est plus tronqué (moins de place pour le texte)
                       - diminue => plus de place pour le label, mais risque de numéros moins lisibles si >9999 */
     
-      flex: 0 0 20px; /* empêche le bloc numéro de grandir/rétrécir :
+      flex: 0 0 40px; /* empêche le bloc numéro de grandir/rétrécir :
                          - 0 (grow) => ne prend pas plus que 40px
                          - 0 (shrink) => ne se réduit pas en dessous de 40px
                          - 40px (basis) => largeur de base = 40px
