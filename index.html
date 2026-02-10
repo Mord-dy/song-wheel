@@ -178,31 +178,38 @@
       pointer-events:none;
     }
     
-    /* TEST VISUEL : carrés blancs à la place des flèches */
+    /* Flèches triangulaires pointant vers le centre */
     .pointer{
       position:absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 26px;
-      height: 26px;
-      background: #ffffff !important;
-      border: 3px solid red !important; /* volontairement visible */
-      border-radius: 4px;
-      z-index: 9999;
+      width: 0;
+      height: 0;
+    
+      /* Triangle */
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+    
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
       pointer-events:none;
+      z-index: 9999;
     }
     
-    /* Carré gauche */
+    /* Gauche : triangle qui pointe vers la droite (vers le centre) */
     .pointer.left{
       left: 6px;
+      border-left: 0;
+      border-right: 18px solid rgba(255,255,255,0.85);
     }
     
-    /* Carré droit */
+    /* Droite : triangle qui pointe vers la gauche (vers le centre) */
     .pointer.right{
       right: 6px;
+      border-right: 0;
+      border-left: 18px solid rgba(255,255,255,0.85);
     }
 
-
+    
     /* Liste virtualisée */
     .reel{
       position:absolute;
