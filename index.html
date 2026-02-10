@@ -195,18 +195,18 @@
       z-index: 9999;
     }
     
-    /* Gauche : triangle qui pointe vers la droite (vers le centre) */
-    .pointer.left{
-      left: 6px;
-      border-left: 0;
-      border-right: 18px solid rgba(255,255,255,0.85);
+    /* Gauche : placé à gauche, pointe vers la DROITE (->) */
+    .pointer.left {
+      left: 4px;
+      border-left: 18px solid rgba(255,255,255,0.85); /* Changé : était border-right */
+      border-right: 0; 
     }
     
-    /* Droite : triangle qui pointe vers la gauche (vers le centre) */
-    .pointer.right{
-      right: 6px;
-      border-right: 0;
-      border-left: 18px solid rgba(255,255,255,0.85);
+    /* Droite : placé à droite, pointe vers la GAUCHE (<-) */
+    .pointer.right {
+      right: 4px;
+      border-right: 18px solid rgba(255,255,255,0.85); /* Changé : était border-left */
+      border-left: 0;
     }
 
     
