@@ -18,7 +18,7 @@
 
       --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       --wheelW: 520px;
-      --wheelH: 520px;
+      --wheelH: 680px;
       --rowH: 44px;
       --rowCount: 11;
     }
@@ -33,6 +33,11 @@
       color: var(--text);
     }
 
+    .title-right{
+    width: var(--wheelW);
+    max-width: 100%;
+    }
+    
     .wrap{
       min-height:100%;
       display:flex;
@@ -60,24 +65,24 @@
     /* Layout : image à gauche, roue à droite */
     .stage{
       display:grid;
-      grid-template-columns: minmax(260px, 420px) 1fr;
+      grid-template-columns: auto var(--wheelW);
       gap: 18px;
       align-items: center;
       justify-items: center;
     }
 
     .left-art{
-      width: 100%;
-      max-width: 420px;
+      height: var(--wheelH);
       display:flex;
-      align-items:center;
+      align-items: flex-start;
       justify-content:center;
     }
 
     .left-art img{
-      width: 100%;
-      height: auto;
+      width: auto;
+      height: 100%;
       display:block;
+      
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,0.12);
       box-shadow: 0 12px 40px rgba(0,0,0,0.45);
@@ -85,7 +90,8 @@
     }
 
     .right-col{
-      width: 100%;
+      width: var(--wheelW);
+      max-width: 100%;
       display:grid;
       gap: 14px;
       justify-items:center;
@@ -96,7 +102,16 @@
         grid-template-columns: 1fr;
       }
       .left-art{
-        max-width: 520px;
+        height: auto;
+        justify-content: center;
+      }
+      .left-art img{
+        height: auto;
+        width: 100%;
+        max-width: var(--wheelW);
+      }
+      .title-right{
+        width: 100%;
       }
     }
 
@@ -362,35 +377,37 @@
 <body>
   <div class="wrap">
     <div class="app">
-      <div class="title">Votre chanson au hasard dans ma playlist — Kl00porte</div>
 
       <div class="stage">
         <div class="left-art">
           <img src="./Background.png" alt="Décor" />
         </div>
 
-        <div class="right-col">
-          <div class="wheel-frame" id="wheelFrame">
-            <div class="lights"></div>
-            <div class="bulbs" id="bulbs"></div>
-
-            <div class="wheel-window">
-              <div class="reel">
-                <div class="rows" id="rows"></div>
-              </div>
-
-              <div class="center-highlight"></div>
-              <div class="pointer left"></div>
-              <div class="pointer right"></div>
+      <div class="right-col">
+        <div class="title title-right">Votre chanson au hasard dans ma playlist — Kl00porte</div>
+      
+        <div class="wheel-frame" id="wheelFrame">
+          <div class="lights"></div>
+          <div class="bulbs" id="bulbs"></div>
+      
+          <div class="wheel-window">
+            <div class="reel">
+              <div class="rows" id="rows"></div>
             </div>
+      
+            <div class="center-highlight"></div>
+            <div class="pointer left"></div>
+            <div class="pointer right"></div>
           </div>
-
-          <div class="controls">
-            <button id="spinBtn">Lancer la roue</button>
-          </div>
-
-          <div class="result" id="result">—</div>
         </div>
+      
+        <div class="controls">
+          <button id="spinBtn">Lancer la roue</button>
+        </div>
+      
+        <div class="result" id="result">—</div>
+      </div>
+
       </div>
     </div>
   </div>
@@ -473,7 +490,7 @@
       const u = String(uri).trim();
       if(u.startsWith("https://open.spotify.com/")) return u;
       const m = /^spotify:track:([A-Za-z0-9]+)$/.exec(u);
-      if(m) return `https://open.spotify.com/track/${m[1]}`;
+      if(m) return `https://open.spotify.com/track/$${m[1]}`;
       return null;
     }
 
