@@ -269,6 +269,44 @@
       font-size: 13px;
       color: var(--muted);
     }
+
+    /* Layout : image à gauche, roue à droite */
+.stage{
+  display:grid;
+  grid-template-columns: minmax(260px, 420px) 1fr;
+  gap: 18px;
+  align-items: center;
+  justify-items: center;
+}
+
+/* Image à gauche */
+.left-art{
+  width: 100%;
+  max-width: 420px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.left-art img{
+  width: 100%;
+  height: auto;
+  display:block;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  object-fit: contain;
+}
+
+/* Responsive : sur petit écran, on empile */
+@media (max-width: 900px){
+  .stage{
+    grid-template-columns: 1fr;
+  }
+  .left-art{
+    max-width: 520px;
+  }
+}
   </style>
 </head>
 
