@@ -32,11 +32,6 @@
                   var(--bg);
       color: var(--text);
     }
-
-    .title-right{
-    width: var(--wheelW);
-    max-width: 100%;
-    }
     
     .wrap{
       min-height:100%;
@@ -62,8 +57,24 @@
       text-align:center;
     }
 
+    .stage{
+      display:grid;
+      grid-template-columns: auto var(--wheelW); /* 2 colonnes : image (auto) + roue (var(--wheelW)) */
+      grid-template-rows: auto auto; /* 2 lignes : titre (auto) + contenu (auto) */
+
+      grid-template-areas:
+        "spacer title" /* Ligne 1 : spacer + titre (à droite) */
+        "left   wheel"; /* Ligne 2 : image + roue (à droite) */
+      gap: 18px;
+      align-items: start;      /* aligne les blocs en haut */
+      justify-content: center; /* centre l’ensemble image+roue sur la page */
+    }
+    
     /* Layout : image à gauche, roue à droite */
-    .stage-spacer{ grid-area: spacer; }
+    .stage-spacer{
+      grid-area: spacer;
+      width: 100%; /* prend la largeur de la colonne image */
+    }
     
     .title-right{
       grid-area: title;
@@ -71,7 +82,24 @@
       max-width: 100%;
     }
     
-    .left-art{ grid-area: left; }
+    .left-art{
+      grid-area: left;
+      height: var(--wheelH);       /* même hauteur que la roue */
+      display:flex;
+      align-items: center; /* centre verticalement */
+      justify-content:center;
+    }
+    
+    .left-art img{
+      width: auto;                 /* conserve le ratio */
+      height: 100%;
+      display:block;
+    
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+      object-fit: contain;
+    }
     
     .right-col{
       grid-area: wheel;
@@ -82,32 +110,6 @@
       justify-items:center;
     }
 
-
-    .left-art{
-      height: var(--wheelH);
-      display:flex;
-      align-items: flex-start;
-      justify-content:center;
-    }
-
-    .left-art img{
-      width: auto;
-      height: 100%;
-      display:block;
-      
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-      object-fit: contain;
-    }
-
-    .right-col{
-      width: var(--wheelW);
-      max-width: 100%;
-      display:grid;
-      gap: 14px;
-      justify-items:center;
-    }
 
     @media (max-width: 900px){
       .stage{
