@@ -178,32 +178,30 @@
       pointer-events:none;
     }
     
-    /* Flèches — FORCÉES vers l’intérieur */
+    /* TEST VISUEL : carrés blancs à la place des flèches */
     .pointer{
       position:absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+      width: 26px;
+      height: 26px;
+      background: #ffffff !important;
+      border: 3px solid red !important; /* volontairement visible */
+      border-radius: 4px;
+      z-index: 9999;
       pointer-events:none;
     }
     
-    /* Gauche : triangle vers la droite (vers le centre) */
+    /* Carré gauche */
     .pointer.left{
-      left: 4px;
-      border-left: 0 !important;
-      border-right: 18px solid rgba(255,255,255,0.85) !important;
+      left: 6px;
     }
     
-    /* Droite : triangle vers la gauche (vers le centre) */
+    /* Carré droit */
     .pointer.right{
-      right: 4px;
-      border-right: 0 !important;
-      border-left: 18px solid rgba(255,255,255,0.85) !important;
+      right: 6px;
     }
+
 
     /* Liste virtualisée */
     .reel{
