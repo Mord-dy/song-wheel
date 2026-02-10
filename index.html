@@ -239,6 +239,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.06);
       letter-spacing: 0.2px;
       user-select:none;
+      gap: 10px;
     }
 
     .row:nth-child(odd){ background: var(--caseA); }
@@ -247,6 +248,9 @@
     .row .num{
       font-variant-numeric: tabular-nums;
       opacity: 0.95;
+      width: 40px;      /* réduit la place du numéro */
+      flex: 0 0 40px;
+      text-align:left;      /* alignement propre */
     }
 
     .row .label{
