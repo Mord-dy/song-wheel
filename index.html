@@ -48,7 +48,7 @@
     }
 
     .app{
-      width:min(980px, 100%);
+      width:min(1400px, 100%);
       display:grid;
       grid-template-columns: 1fr;
       gap: 18px;
@@ -65,10 +65,11 @@
     /* Layout : image à gauche, roue à droite */
     .stage{
       display:grid;
-      grid-template-columns: auto var(--wheelW);
+      grid-template-columns: auto var(--wheelW); /* gauche = image à largeur auto, droite = roue */
       gap: 18px;
-      align-items: center;
-      justify-items: center;
+      align-items: start;       /* aligne en haut (image et roue démarrent au même niveau) */
+      justify-content: center;  /* centre l’ensemble image+roue dans la page */
+      justify-items: start;     /* évite le centrage interne qui peut réduire visuellement la place */
     }
 
     .left-art{
@@ -490,7 +491,7 @@
       const u = String(uri).trim();
       if(u.startsWith("https://open.spotify.com/")) return u;
       const m = /^spotify:track:([A-Za-z0-9]+)$/.exec(u);
-      if(m) return `https://open.spotify.com/track/$${m[1]}`;
+      if(m) return `https://open.spotify.com/track/${m[1]}`;
       return null;
     }
 
