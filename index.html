@@ -236,8 +236,8 @@
       justify-content:space-between; /* pousse .num complètement à gauche et .label complètement à droite (en utilisant tout l'espace disponible entre les deux) */
 
           /* RÉSERVE de l'espace À GAUCHE et À DROITE à l’intérieur de chaque ligne : */
-      padding-left: 50px;   /* - augmente padding-left (120px) => le numéro commence plus à droite (et s’éloigne de la flèche gauche) */
-      padding-right: 30px;  /* - augmente padding-right (120px) => le label finit plus à gauche (et s’éloigne de la flèche droite) */
+      padding-left: 10px;   /* - augmente padding-left (120px) => le numéro commence plus à droite (et s’éloigne de la flèche gauche) */
+      padding-right: 10px;  /* - augmente padding-right (120px) => le label finit plus à gauche (et s’éloigne de la flèche droite) */
         /* => c’est le principal levier pour “éloigner” le texte des flèches, mais ça rétrécit beaucoup la zone utile pour le label */
       
       box-sizing:border-box; /* fait que le padding est inclus dans la largeur de la ligne (évite des débordements) */
@@ -255,11 +255,11 @@
       font-variant-numeric: tabular-nums;
       opacity: 0.95;
     
-      width: 40px; /* LARGEUR FIXE réservée au numéro :
+      width: 20px; /* LARGEUR FIXE réservée au numéro :
                       - augmente => le label est plus tronqué (moins de place pour le texte)
                       - diminue => plus de place pour le label, mais risque de numéros moins lisibles si >9999 */
     
-      flex: 0 0 40px; /* empêche le bloc numéro de grandir/rétrécir :
+      flex: 0 0 20px; /* empêche le bloc numéro de grandir/rétrécir :
                          - 0 (grow) => ne prend pas plus que 40px
                          - 0 (shrink) => ne se réduit pas en dessous de 40px
                          - 40px (basis) => largeur de base = 40px
@@ -284,7 +284,7 @@
                               - nowrap => 1 ligne max (plus d’ellipsis)
                               - normal => autorise retours à la ligne (si on veut 2 lignes, il faut enlever nowrap) */
     
-      max-width: 68%; /* LIMITE artificielle de largeur du label (en % de la ligne) :
+      max-width: 100%; /* LIMITE artificielle de largeur du label (en % de la ligne) :
                          - diminue => label encore plus tronqué (moins de place)
                          - augmente / supprime => le label peut prendre plus d’espace
                          ⚠️ avec justify-content:space-between + num width fixe, ce max-width peut être contre-productif
