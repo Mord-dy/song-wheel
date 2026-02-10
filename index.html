@@ -297,10 +297,14 @@
     /* Contrôles */
     .controls{
       display:flex;
-      gap: 12px;
+      width: var(--wheelW); 
+      max-width: 100%;
       align-items:center;
       justify-content:center;
-      flex-wrap: wrap;
+    }
+
+    .controls button{
+    width: 100%;            /* le bouton prend toute la largeur du conteneur */
     }
 
     button{
@@ -326,10 +330,10 @@
       background: var(--panel);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 14px;
-      padding: 12px 14px;
+      padding: 16px 18px;
       box-sizing:border-box;
       text-align:center;
-      min-height: 48px;
+      min-height: 82px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -409,7 +413,7 @@
         caseB: "rgba(255,43,214,0.18)",
         border: "rgba(255,255,255,0.18)",
         font: "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
-        wheelW: "520px",
+        wheelW: "680px",
         wheelH: "520px"
       },
       ENABLE_BULBS: true,
