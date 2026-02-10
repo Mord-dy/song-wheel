@@ -190,15 +190,17 @@
       filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
       pointer-events:none;
     }
-
+    
+    /* Gauche : pointe vers le centre (->) */
     .pointer.left{
-      left: 4px; /* plus près du bord de la window */
-      border-right: 18px solid rgba(255,255,255,0.85); /* pointe vers le centre */
+      left: 4px; /* proche du bord de la window, donc loin du texte */
+      border-right: 18px solid rgba(255,255,255,0.85);
     }
-
+    
+    /* Droite : pointe vers le centre (<-) */
     .pointer.right{
-      right: 4px; /* plus près du bord de la window */
-      border-left: 18px solid rgba(255,255,255,0.85); /* pointe vers le centre */
+      right: 4px; /* proche du bord de la window, donc loin du texte */
+      border-left: 18px solid rgba(255,255,255,0.85);
     }
 
     /* Liste virtualisée */
