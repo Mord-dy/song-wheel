@@ -63,14 +63,25 @@
     }
 
     /* Layout : image à gauche, roue à droite */
-    .stage{
-      display:grid;
-      grid-template-columns: auto var(--wheelW); /* gauche = image à largeur auto, droite = roue */
-      gap: 18px;
-      align-items: start;       /* aligne en haut (image et roue démarrent au même niveau) */
-      justify-content: center;  /* centre l’ensemble image+roue dans la page */
-      justify-items: start;     /* évite le centrage interne qui peut réduire visuellement la place */
+    .stage-spacer{ grid-area: spacer; }
+    
+    .title-right{
+      grid-area: title;
+      width: var(--wheelW);
+      max-width: 100%;
     }
+    
+    .left-art{ grid-area: left; }
+    
+    .right-col{
+      grid-area: wheel;
+      width: var(--wheelW);
+      max-width: 100%;
+      display:grid;
+      gap: 14px;
+      justify-items:center;
+    }
+
 
     .left-art{
       height: var(--wheelH);
@@ -378,38 +389,44 @@
 <body>
   <div class="wrap">
     <div class="app">
-
+            
       <div class="stage">
+        <!-- Case vide à gauche sur la ligne du titre -->
+        <div class="stage-spacer" aria-hidden="true"></div>
+      
+        <!-- Titre au-dessus de la roue (colonne droite seulement) -->
+        <div class="title title-right">Votre chanson au hasard dans ma playlist — Kl00porte</div>
+      
+        <!-- Image alignée avec la roue (ligne 2) -->
         <div class="left-art">
           <img src="./Background.png" alt="Décor" />
         </div>
-
-      <div class="right-col">
-        <div class="title title-right">Votre chanson au hasard dans ma playlist — Kl00porte</div>
       
-        <div class="wheel-frame" id="wheelFrame">
-          <div class="lights"></div>
-          <div class="bulbs" id="bulbs"></div>
+        <!-- Colonne droite : roue + bouton + résultat (ligne 2) -->
+        <div class="right-col">
+          <div class="wheel-frame" id="wheelFrame">
+            <div class="lights"></div>
+            <div class="bulbs" id="bulbs"></div>
       
-          <div class="wheel-window">
-            <div class="reel">
-              <div class="rows" id="rows"></div>
+            <div class="wheel-window">
+              <div class="reel">
+                <div class="rows" id="rows"></div>
+              </div>
+      
+              <div class="center-highlight"></div>
+              <div class="pointer left"></div>
+              <div class="pointer right"></div>
             </div>
-      
-            <div class="center-highlight"></div>
-            <div class="pointer left"></div>
-            <div class="pointer right"></div>
           </div>
-        </div>
       
-        <div class="controls">
-          <button id="spinBtn">Lancer la roue</button>
-        </div>
+          <div class="controls">
+            <button id="spinBtn">Lancer la roue</button>
+          </div>
       
-        <div class="result" id="result">—</div>
+          <div class="result" id="result">—</div>
+        </div>
       </div>
-
-      </div>
+      
     </div>
   </div>
 
