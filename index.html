@@ -234,12 +234,12 @@
       align-items:center; /* aligne verticalement .num et .label au milieu de la hauteur de la ligne */
     
       justify-content:space-between; /* pousse .num complètement à gauche et .label complètement à droite (en utilisant tout l'espace disponible entre les deux) */
-    
-      padding: 0 120px; /* RÉSERVE de l'espace À GAUCHE et À DROITE à l’intérieur de chaque ligne :
-                           - augmente padding-left (120px) => le numéro commence plus à droite (et s’éloigne de la flèche gauche)
-                           - augmente padding-right (120px) => le label finit plus à gauche (et s’éloigne de la flèche droite)
-                           => c’est le principal levier pour “éloigner” le texte des flèches, mais ça rétrécit beaucoup la zone utile pour le label */
-    
+
+          /* RÉSERVE de l'espace À GAUCHE et À DROITE à l’intérieur de chaque ligne : */
+      padding-left: 50px;   /* - augmente padding-left (120px) => le numéro commence plus à droite (et s’éloigne de la flèche gauche) */
+      padding-right: 30px;  /* - augmente padding-right (120px) => le label finit plus à gauche (et s’éloigne de la flèche droite) */
+        /* => c’est le principal levier pour “éloigner” le texte des flèches, mais ça rétrécit beaucoup la zone utile pour le label */
+      
       box-sizing:border-box; /* fait que le padding est inclus dans la largeur de la ligne (évite des débordements) */
     
       font-size: 18px;
