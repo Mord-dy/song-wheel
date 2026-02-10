@@ -6,7 +6,6 @@
   <title>Tirage au sort — Roue verticale</title>
   <style>
     :root{
-      /* Les variables CSS sont alimentées par CONFIG via JS */
       --bg: #0b0f1a;
       --panel: rgba(255,255,255,0.06);
       --text: #e9ecff;
@@ -67,7 +66,6 @@
       justify-items: center;
     }
 
-    /* Image à gauche */
     .left-art{
       width: 100%;
       max-width: 420px;
@@ -86,7 +84,6 @@
       object-fit: contain;
     }
 
-    /* Colonne droite : roue + contrôles + résultat */
     .right-col{
       width: 100%;
       display:grid;
@@ -94,7 +91,6 @@
       justify-items:center;
     }
 
-    /* Responsive : sur petit écran, on empile */
     @media (max-width: 900px){
       .stage{
         grid-template-columns: 1fr;
@@ -135,6 +131,7 @@
       border-radius: 14px;
       pointer-events:none;
     }
+
     .bulb{
       position:absolute;
       width: 10px;
@@ -144,8 +141,10 @@
       box-shadow: 0 0 12px rgba(255,255,255,0.20);
       animation: blink 1.1s infinite steps(2,end);
     }
+
     .bulb:nth-child(3n){ animation-duration: 0.9s; }
     .bulb:nth-child(4n){ animation-duration: 1.3s; }
+
     @keyframes blink{
       0%{ opacity: 0.35; filter: saturate(1); }
       50%{ opacity: 0.95; filter: saturate(1.6); }
@@ -165,7 +164,7 @@
       overflow:hidden;
     }
 
-    /* Bande centrale (highlight) + curseur */
+    /* Bande centrale (highlight) */
     .center-highlight{
       position:absolute;
       left:0; right:0;
@@ -179,24 +178,27 @@
       pointer-events:none;
     }
 
+    /* Flèches pointant vers le texte (sans chevauchement) */
     .pointer{
       position:absolute;
       top: 50%;
       transform: translateY(-50%);
       width: 0;
       height: 0;
-      border-top: 14px solid transparent;
-      border-bottom: 14px solid transparent;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
       filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
       pointer-events:none;
     }
+
     .pointer.left{
-      left: 12px;
-      border-right: 20px solid rgba(255,255,255,0.85);
+      left: 4px; /* plus près du bord de la window */
+      border-right: 18px solid rgba(255,255,255,0.85); /* pointe vers le centre */
     }
+
     .pointer.right{
-      right: 12px;
-      border-left: 20px solid rgba(255,255,255,0.85);
+      right: 4px; /* plus près du bord de la window */
+      border-left: 18px solid rgba(255,255,255,0.85); /* pointe vers le centre */
     }
 
     /* Liste virtualisée */
@@ -236,6 +238,7 @@
       font-variant-numeric: tabular-nums;
       opacity: 0.95;
     }
+
     .row .label{
       opacity: 0.9;
       text-align:right;
@@ -269,20 +272,10 @@
       box-shadow: 0 8px 22px rgba(0,0,0,0.35);
       transition: transform 0.08s ease, background 0.15s ease;
     }
+
     button:hover{ background: rgba(255,255,255,0.11); }
     button:active{ transform: translateY(1px); }
-    button:disabled{
-      opacity: 0.55;
-      cursor:not-allowed;
-    }
-
-    .meta{
-      font-size: 13px;
-      color: var(--muted);
-      text-align:center;
-      max-width: 860px;
-      line-height: 1.45;
-    }
+    button:disabled{ opacity: 0.55; cursor:not-allowed; }
 
     .result{
       width: min(860px, 100%);
@@ -298,9 +291,7 @@
       justify-content:center;
     }
 
-    .result strong{
-      color: var(--text);
-    }
+    .result strong{ color: var(--text); }
 
     .small{
       display:block;
@@ -309,7 +300,6 @@
       color: var(--muted);
     }
 
-    /* Lien Spotify dans le résultat */
     .song-link{
       color: var(--text);
       text-decoration: underline;
@@ -349,39 +339,22 @@
 
           <div class="controls">
             <button id="spinBtn">Lancer la roue</button>
-            <button id="resetBagBtn" title="Remélange le sac (si tu veux repartir de zéro)">Remélanger</button>
           </div>
 
           <div class="result" id="result">—</div>
-          <div class="meta" id="meta"></div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    /*****************************************************************
-     * CONFIG — Tous les paramètres regroupés ici
-     *****************************************************************/
     const CONFIG = {
-      // Si songs.json est présent et valide, N sera ignoré et remplacé par songs.length
       N: 2000,
-
-      // Durée du spin en millisecondes (paramétrable en dur)
       SPIN_DURATION_MS: 5000,
-
-      // Nombre de lignes visibles (impair, pour avoir un centre)
       VISIBLE_ROWS: 11,
-
-      // Hauteur d’une ligne en pixels (doit matcher le CSS --rowH)
       ROW_HEIGHT_PX: 44,
-
-      // Contrôle du "ressenti" : nombre de pas visuels minimum/maximum
-      // (ce ne sont pas des "chansons", juste des crans d’animation)
       BASE_STEPS_MIN: 120,
       BASE_STEPS_MAX: 190,
-
-      // Thème
       THEME: {
         bg: "#0b0f1a",
         text: "#e9ecff",
@@ -395,15 +368,10 @@
         wheelW: "520px",
         wheelH: "520px"
       },
-
-      // Bonus 80s : lumières
       ENABLE_BULBS: true,
-      BULB_COUNT: 44, // autour du cadre
+      BULB_COUNT: 44,
     };
 
-    /*****************************************************************
-     * Utilitaires
-     *****************************************************************/
     function setThemeVars() {
       const t = CONFIG.THEME;
       const r = document.documentElement.style;
@@ -418,15 +386,11 @@
       r.setProperty("--font", t.font);
       r.setProperty("--wheelW", t.wheelW);
       r.setProperty("--wheelH", t.wheelH);
-
       r.setProperty("--rowH", CONFIG.ROW_HEIGHT_PX + "px");
       r.setProperty("--rowCount", CONFIG.VISIBLE_ROWS);
     }
 
-    function easeOutCubic(x) {
-      return 1 - Math.pow(1 - x, 3);
-    }
-
+    function easeOutCubic(x) { return 1 - Math.pow(1 - x, 3); }
     function clamp01(x){ return Math.max(0, Math.min(1, x)); }
 
     function secureRandomInt(maxExclusive){
@@ -457,32 +421,24 @@
     }
 
     function spotifyUriToUrl(uri){
-      // Supporte: spotify:track:<id> et https://open.spotify.com/track/<id>
       if(!uri) return null;
       const u = String(uri).trim();
-
       if(u.startsWith("https://open.spotify.com/")) return u;
-
       const m = /^spotify:track:([A-Za-z0-9]+)$/.exec(u);
       if(m) return `https://open.spotify.com/track/${m[1]}`;
-
       return null;
     }
 
-    /*****************************************************************
-     * Données chansons (optionnel)
-     *****************************************************************/
-    let SONGS = null; // soit array de strings, soit array d'objets {title, artist, uri}
+    let SONGS = null;
+
     async function loadSongsIfAny(){
       try{
         const res = await fetch("./songs.json", { cache: "no-store" });
         if(!res.ok) return null;
         const data = await res.json();
         if(!Array.isArray(data) || data.length === 0) return null;
-
         if(typeof data[0] === "string") return data;
-        if(typeof data[0] === "object" && data[0] && ("title" in data[0] || "artist" in data[0])) return data;
-
+        if(typeof data[0] === "object" && data[0] && ("title" in data[0] || "artist" in data[0] || "uri" in data[0] || "url" in data[0])) return data;
         return null;
       } catch {
         return null;
@@ -500,14 +456,11 @@
     function getSongUrl(entry){
       if(entry == null) return null;
       if(typeof entry === "string") return null;
-      // accepte "uri" ou "url"
       const candidate = entry.url ?? entry.uri ?? null;
       return spotifyUriToUrl(candidate);
     }
 
-    /*****************************************************************
-     * Mécanique "sans répétition" (sac mélangé)
-     *****************************************************************/
+    // Sac sans répétition
     let bag = [];
     let bagIndex = 0;
 
@@ -526,20 +479,14 @@
       return v;
     }
 
-    /*****************************************************************
-     * Rendu roue virtualisée
-     *****************************************************************/
+    // Rendu roue virtualisée
     const rowsEl = document.getElementById("rows");
     const spinBtn = document.getElementById("spinBtn");
-    const resetBagBtn = document.getElementById("resetBagBtn");
     const resultEl = document.getElementById("result");
-    const metaEl = document.getElementById("meta");
 
     const centerSlot = Math.floor(CONFIG.VISIBLE_ROWS / 2);
-
     let nValue = CONFIG.N;
     let centerIndexValue = 0;
-
     let absoluteStep = 0;
     let isSpinning = false;
 
@@ -567,8 +514,8 @@
 
     function renderRows(centerIndex, fractionalOffset){
       rowsEl.style.transform = `translateY(${-fractionalOffset * CONFIG.ROW_HEIGHT_PX}px)`;
-
       const rowNodes = rowsEl.children;
+
       for(let i=0; i<rowNodes.length; i++){
         const logicalIndex = mod(centerIndex + (i - centerSlot), nValue);
         const displayNumber = logicalIndex + 1;
@@ -585,9 +532,6 @@
       }
     }
 
-    /*****************************************************************
-     * Animation : on tire X d'abord, puis on anime jusqu’à X
-     *****************************************************************/
     function computeTotalStepsToLandOn(targetIndex){
       const delta = mod(targetIndex - centerIndexValue, nValue);
       const baseSteps = CONFIG.BASE_STEPS_MIN + secureRandomInt(CONFIG.BASE_STEPS_MAX - CONFIG.BASE_STEPS_MIN + 1);
@@ -660,9 +604,6 @@
       requestAnimationFrame(tick);
     }
 
-    /*****************************************************************
-     * Bonus 80s bulbs
-     *****************************************************************/
     function buildBulbs(){
       const bulbsEl = document.getElementById("bulbs");
       bulbsEl.innerHTML = "";
@@ -693,23 +634,12 @@
       });
     }
 
-    /*****************************************************************
-     * Init
-     *****************************************************************/
     async function init(){
       setThemeVars();
       buildRows();
 
       SONGS = await loadSongsIfAny();
-      if(SONS = SONGS){ /* no-op to avoid lint; overwritten below */ }
-
-      if(SONGS){
-        nValue = SONGS.length;
-        metaEl.textContent = `Mode chansons : ${nValue} titres (tirage sans répétition).`;
-      } else {
-        nValue = CONFIG.N;
-        metaEl.textContent = `Mode numérique : n = ${nValue} (tirage sans répétition).`;
-      }
+      nValue = SONGS ? SONGS.length : CONFIG.N;
 
       refillBag(nValue);
 
@@ -720,10 +650,6 @@
       window.addEventListener("resize", buildBulbs);
 
       spinBtn.addEventListener("click", spin);
-      resetBagBtn.addEventListener("click", () => {
-        refillBag(nValue);
-        resultEl.textContent = "—";
-      });
     }
 
     init();
