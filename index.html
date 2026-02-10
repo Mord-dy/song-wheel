@@ -556,24 +556,43 @@
       return spotifyUriToUrl(candidate);
     }
 
-    // Sac sans répétition
-    let bag = [];
-    let bagIndex = 0;
 
-    function refillBag(n){
-      bag = Array.from({length:n}, (_,i)=>i);
-      fisherYatesShuffle(bag);
-      bagIndex = 0;
+    // Sac sans répétition (sur les chansons réelles)
+    let songBag = [];
+    let songBagIndex = 0;
+    
+    function refillSongBag(n){
+      songBag = Array.from({length:n}, (_,i)=>i); // indices de SONGS
+      fisherYatesShuffle(songBag);
+      songBagIndex = 0;
     }
-
-    function drawUniqueIndex(n){
-      if(bag.length !== n || bagIndex >= bag.length){
-        refillBag(n);
+    
+    function drawUniqueSongIndex(n){
+      if(songBag.length !== n || songBagIndex >= songBag.length){
+        refillSongBag(n);
       }
-      const v = bag[bagIndex];
-      bagIndex++;
-      return v;
+      const v = songBag[songBagIndex];
+      songBagIndex++;
+      return v; // index réel dans SONGS
     }
+
+
+    // Ordre d'affichage de la roue : permutation aléatoire des indices SONGS
+    let wheelOrder = [];
+    let wheelInv = [];
+    
+    function reshuffleWheelOrder(n){
+      wheelOrder = Array.from({length:n}, (_,i)=>i); // positions -> index chanson
+      fisherYatesShuffle(wheelOrder);
+    
+      // inverse : index chanson -> position dans la roue
+      wheelInv = Array(n);
+      for(let pos = 0; pos < n; pos++){
+        wheelInv[wheelOrder[pos]] = pos;
+      }
+    }
+
+    
 
     // Rendu roue virtualisée
     const rowsEl = document.getElementById("rows");
@@ -608,25 +627,32 @@
       return ((a % m) + m) % m;
     }
 
+    
     function renderRows(centerIndex, fractionalOffset){
       rowsEl.style.transform = `translateY(${-fractionalOffset * CONFIG.ROW_HEIGHT_PX}px)`;
       const rowNodes = rowsEl.children;
-
+    
       for(let i=0; i<rowNodes.length; i++){
-        const logicalIndex = mod(centerIndex + (i - centerSlot), nValue);
-        const displayNumber = logicalIndex + 1;
-
+        const logicalPos = mod(centerIndex + (i - centerSlot), nValue);
+    
+        // index réel de chanson dans SONGS, selon l'ordre aléatoire de la roue
+        const songIdx = wheelOrder[logicalPos];
+    
+        // Numéro affiché : numéro "playlist" (index réel + 1)
+        const displayNumber = songIdx + 1;
+    
         const row = rowNodes[i];
         row.querySelector(".num").textContent = displayNumber;
-
+    
         const label = row.querySelector(".label");
         if(SONGS){
-          label.textContent = formatSong(SONGS[logicalIndex]);
+          label.textContent = formatSong(SONGS[songIdx]);
         } else {
           label.textContent = "";
         }
       }
     }
+
 
     function computeTotalStepsToLandOn(targetIndex){
       const delta = mod(targetIndex - centerIndexValue, nValue);
@@ -640,8 +666,12 @@
       isSpinning = true;
       spinBtn.disabled = true;
 
-      const targetIndex = drawUniqueIndex(nValue);
-      const totalSteps = computeTotalStepsToLandOn(targetIndex);
+      
+      reshuffleWheelOrder(nValue);  // Varie l'affichage d'un spin à l'autre :
+      const targetSongIdx = drawUniqueSongIndex(nValue);  // Tirage réel (sans répétition) : on tire une chanson dans SONGS
+      const targetPos = wheelInv[targetSongIdx];  // On convertit en "position cible" dans la roue (ordre aléatoire)
+      const totalSteps = computeTotalStepsToLandOn(targetPos);
+
 
       const startAbsolute = absoluteStep;
       const startTime = performance.now();
@@ -667,10 +697,13 @@
         centerIndexValue = mod(centerIndexValue + totalSteps, nValue);
         renderRows(centerIndexValue, 0);
 
-        const X = centerIndexValue + 1;
-
+    
+        // Chanson réellement sélectionnée (index réel dans SONGS)
+        const pickedSongIdx = wheelOrder[centerIndexValue];
+        const X = pickedSongIdx + 1;
+        
         if(SONGS){
-          const entry = SONGS[centerIndexValue];
+          const entry = SONGS[pickedSongIdx];
           const songText = formatSong(entry);
           const songUrl = getSongUrl(entry);
 
@@ -737,10 +770,12 @@
       SONGS = await loadSongsIfAny();
       nValue = SONGS ? SONGS.length : CONFIG.N;
 
-      refillBag(nValue);
-
-      centerIndexValue = secureRandomInt(nValue);
+      refillSongBag(nValue);
+      reshuffleWheelOrder(nValue);
+      
+      centerIndexValue = secureRandomInt(nValue); // position initiale au hasard dans la roue
       renderRows(centerIndexValue, 0);
+
 
       buildBulbs();
       window.addEventListener("resize", buildBulbs);
