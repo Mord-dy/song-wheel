@@ -226,20 +226,26 @@
       transform: translateY(0px);
       will-change: transform;
     }
-
+    
     .row{
       height: var(--rowH);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding-left: 2px;   /* paramètre de position des flèches */
-      padding-right: 25px;  /* paramètre de position des flèches */
-      box-sizing:border-box;
+    
+      display:flex; /* met .num et .label sur une même ligne (layout horizontal) */
+      align-items:center; /* aligne verticalement .num et .label au milieu de la hauteur de la ligne */
+    
+      justify-content:space-between; /* pousse .num complètement à gauche et .label complètement à droite (en utilisant tout l'espace disponible entre les deux) */
+    
+      padding: 0 120px; /* RÉSERVE de l'espace À GAUCHE et À DROITE à l’intérieur de chaque ligne :
+                           - augmente padding-left (120px) => le numéro commence plus à droite (et s’éloigne de la flèche gauche)
+                           - augmente padding-right (120px) => le label finit plus à gauche (et s’éloigne de la flèche droite)
+                           => c’est le principal levier pour “éloigner” le texte des flèches, mais ça rétrécit beaucoup la zone utile pour le label */
+    
+      box-sizing:border-box; /* fait que le padding est inclus dans la largeur de la ligne (évite des débordements) */
+    
       font-size: 18px;
       border-bottom: 1px solid rgba(255,255,255,0.06);
       letter-spacing: 0.2px;
       user-select:none;
-      gap: 10px;
     }
 
     .row:nth-child(odd){ background: var(--caseA); }
@@ -248,19 +254,44 @@
     .row .num{
       font-variant-numeric: tabular-nums;
       opacity: 0.95;
-      width: 40px;      /* réduit la place du numéro */
-      flex: 0 0 40px;
-      text-align:left;      /* alignement propre */
+    
+      width: 40px; /* LARGEUR FIXE réservée au numéro :
+                      - augmente => le label est plus tronqué (moins de place pour le texte)
+                      - diminue => plus de place pour le label, mais risque de numéros moins lisibles si >9999 */
+    
+      flex: 0 0 40px; /* empêche le bloc numéro de grandir/rétrécir :
+                         - 0 (grow) => ne prend pas plus que 40px
+                         - 0 (shrink) => ne se réduit pas en dessous de 40px
+                         - 40px (basis) => largeur de base = 40px
+                         => garantit que la place “numéro” reste stable, et que le label récupère le reste */
+    
+      text-align:left; /* aligne le contenu du numéro à gauche DANS son bloc de 40px :
+                          - left => chiffres proches du bord gauche du bloc num
+                          - right => chiffres collés à droite du bloc num (peut libérer un peu de “visuel” à gauche) */
     }
 
     .row .label{
-    font-variant-numeric: tabular-nums;
-    opacity: 0.95;
-    /* réduit la place du numéro */
-    width: 40px;
-    flex: 0 0 40px;
-    /* alignement propre */
-    text-align:left;
+      opacity: 0.9;
+    
+      text-align:right; /* colle le texte à droite DANS la zone label :
+                           - right => le texte “vient” vers la flèche droite
+                           - left => le texte “part” depuis la gauche, souvent mieux pour lisibilité
+                           - center => au centre de sa zone */
+    
+      overflow:hidden; /* coupe tout ce qui dépasse de la zone label (nécessaire pour ellipsis) */
+      text-overflow: ellipsis; /* ajoute ... quand le texte est coupé (nécessite overflow hidden + nowrap) */
+      white-space: nowrap; /* force le texte sur 1 seule ligne :
+                              - nowrap => 1 ligne max (plus d’ellipsis)
+                              - normal => autorise retours à la ligne (si on veut 2 lignes, il faut enlever nowrap) */
+    
+      max-width: 68%; /* LIMITE artificielle de largeur du label (en % de la ligne) :
+                         - diminue => label encore plus tronqué (moins de place)
+                         - augmente / supprime => le label peut prendre plus d’espace
+                         ⚠️ avec justify-content:space-between + num width fixe, ce max-width peut être contre-productif
+                         et provoquer du tronquage “inutile”. C’est un levier clé à ajuster (voire à retirer). */
+    
+      color: var(--muted);
+      font-size: 14px;
     }
 
     /* Contrôles */
