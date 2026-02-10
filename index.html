@@ -316,29 +316,46 @@
       <div class="title">Tirage au sort — roue verticale (virtualisée, sans répétition)</div>
 
       <div class="stage">
-        <div class="wheel-frame" id="wheelFrame">
-          <div class="lights"></div>
-          <div class="bulbs" id="bulbs"></div>
-
-          <div class="wheel-window">
-            <div class="reel">
-              <div class="rows" id="rows"></div>
+      
+        <!-- Colonne gauche : ton image -->
+        <div class="left-art">
+          <img src="./Background.png" alt="Décor" />
+        </div>
+      
+        <!-- Colonne droite : toute la roue + boutons + résultat -->
+        <div class="right-col">
+      
+          <!-- ICI : ton bloc roue complet inchangé -->
+          <div class="wheel-frame" id="wheelFrame">
+            <div class="lights"></div>
+            <div class="bulbs" id="bulbs"></div>
+      
+            <div class="wheel-window">
+              <div class="reel">
+                <div class="rows" id="rows"></div>
+              </div>
+      
+              <div class="center-highlight"></div>
+              <div class="pointer left"></div>
+              <div class="pointer right"></div>
             </div>
-
-            <div class="center-highlight"></div>
-            <div class="pointer left"></div>
-            <div class="pointer right"></div>
           </div>
+      
+          <!-- ICI : tes boutons inchangés -->
+          <div class="controls">
+            <button id="spinBtn">Lancer la roue</button>
+            <button id="resetBagBtn">Remélanger</button>
+          </div>
+      
+          <!-- ICI : résultat inchangé -->
+          <div class="result" id="result">—</div>
+      
+          <!-- ICI : meta inchangé -->
+          <div class="meta" id="meta"></div>
+      
         </div>
-
-        <div class="controls">
-          <button id="spinBtn">Lancer la roue</button>
-          <button id="resetBagBtn" title="Remélange le sac (si tu veux repartir de zéro)">Remélanger</button>
-        </div>
-
-        <div class="result" id="result">—</div>
-        <div class="meta" id="meta"></div>
       </div>
+
     </div>
   </div>
 
